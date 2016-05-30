@@ -1,0 +1,122 @@
+﻿@using PaperParser.Model
+@model WarAnalysis
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <h2>Unknown actions</h2>
+    @foreach (var action in Model.UnknownActions)
+    {
+        <span style="display: block">@action</span>
+    }
+</div>
+<div>
+    @foreach (var province in Model.Provinces.OrderByDescending(p => p.NumberOfUniques()).ThenBy(p => p.TimeBetweenUniques()).ThenBy(p => p.LandLost).ThenBy(p => p.LandGained))
+    {
+        <h2>@province.ProvinceName</h2>
+        <ul style="list-style-type: none">
+            @if (Model.IsMartyr(province.ProvinceName))
+            {
+                <li>* Martyr</li>
+            }
+            @if (Model.IsLuckyBastard(province.ProvinceName))
+            {
+                <li>* Lucky bastard</li>
+            }
+            @if (Model.IsHeavyWeightChampion(province.ProvinceName))
+            {
+                <li>* Heavy weight champion</li>
+            }
+            @if (Model.IsPoorSoul(province.ProvinceName))
+            {
+                <li>* Poor soul</li>
+            }
+            @if (Model.IsOctopusGeneral(province.ProvinceName))
+            {
+                <li>* Octopus general</li>
+            }
+            @if (Model.IsNoLifer(province.ProvinceName))
+            {
+                <li>* No lifer</li>
+            }
+            @if (Model.IsAlarm(province.ProvinceName))
+            {
+                <li>* I set my alarm</li>
+            }
+            @if (@province.DragonsSlain == 1)
+            {
+                <li>* Dragonslayer</li>
+            }
+            @if (@province.DragonsSlain > 1)
+            {
+                <li>* Master Dragonslayer</li>
+            }
+            @if (Model.IsAssistant(province.ProvinceName))
+            {
+                <li>* Assistant</li>
+            }
+            @if (Model.IsLeecher(province.ProvinceName))
+            {
+                <li>* Leecher</li>
+            }
+            @if (Model.IsOnlineAsOrdered(province.ProvinceName))
+            {
+                <li>* Online as ordered</li>
+            }
+            @if (province.AttacksMade > 0 && province.FailedAttacksMade == 0)
+            {
+                <li>* Perfect record</li>
+            }
+            @if (province.FailedAttacksReceived > 0)
+            {
+                <li>* Bounce you fool</li>
+            }
+            @if (province.AttacksReceived == 0)
+            {
+                <li>* Turtle</li>
+            }
+        </ul>
+        <br/>
+        <div>
+            <span style="display: block">Total land exchanged: @(province.NetGain() > 0 ? "+" : "")@(province.NetGain()) (@province.AttacksMade/@province.AttacksReceived)</span>
+            <span style="display: block">Total attacks made: @province.AttacksMade (@province.LandGained acres)</span>
+            <span style="display: block">-- Traditional march: @province.TraditionalMarchMade (@province.TraditionalMarchGained acres)</span>
+            <span style="display: block">-- Ambush: @province.AmbushMade (@province.AmbushGained acres)</span>
+            <span style="display: block">-- Conquest: @province.ConquestMade (@province.ConquestGained acres)</span>
+            <span style="display: block">-- Raze: @province.RazeMade (@province.LandRazed buildings)</span>
+            <span style="display: block">-- Massacre: @province.MassacreMade (@province.PeopleKilled population)</span>
+            @if (province.FailedAttacksMade > 0)
+            {
+                <span style="display: block">-- Failed: @province.FailedAttacksMade (@((province.FailedAttacksMade * 1.00 / province.AttacksMade) * 100)% failure)</span>
+            }
+            <span style="display: block">-- Uniques: @province.NumberOfUniques()</span>
+            <span style="display: block">Total attacks suffered: @province.AttacksReceived (@province.LandLost acres)</span>
+            <span style="display: block">-- Traditional march: @province.TraditionalMarchReceived (@province.TraditionalMarchLost acres)</span>
+            <span style="display: block">-- Ambush: @province.AmbushReceived (@province.AmbushLost acres)</span>
+            <span style="display: block">-- Raze: @province.RazeReceived (@province.LandLostRazed buildings)</span>
+            <span style="display: block">-- Massacre: @province.MassacreReceived (@province.PeopleLost population)</span>
+            @if (province.FailedAttacksReceived > 0)
+            {
+                <span style="display: block">-- Failed: @province.FailedAttacksReceived (@((province.FailedAttacksReceived * 1.00 / province.AttacksReceived)*100)% failure)</span>
+            }
+            <br/>
+            <span style="display: block">Aid sent: @province.AidSent</span>
+            <span style="display: block">Aid received: @province.AidReceived</span>
+            <span style="display: block">First attack: @province.GetFirstAttack()</span>
+            <span style="display: block">Last attack: @province.GetLastAttack()</span>
+            <span style="display: block">Time between uniques: @province.TimeBetweenUniquesString()</span>
+            <span style="display: block">Average unique land gain: @province.AverageUniqueGain() acres</span>
+            <span style="display: block">Heavies 5 hour chain against: @province.HeaviestChain()</span>
+        </div>
+        <br/>
+        <div>
+            @foreach (var action in province.AllActions)
+            {
+                <span style="display: block">@action</span>
+            }
+        </div>
+        <br/>
+    }
+</div>
