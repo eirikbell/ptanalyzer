@@ -34,5 +34,33 @@ namespace WarAnalyzer.Controllers
 
             return View("Analysis", parsed);
         }
+
+        // GET: /<controller>/
+        public IActionResult War2_4()
+        {
+            var file = "war2_4.txt";
+
+            var dataLoader = new DataLoader();
+
+            var data = dataLoader.GetData(file);
+
+            var parsed = new DataParser().Parse(data);
+
+            return View("Analysis", parsed);
+        }
+
+        // GET: /<controller>/
+        public IActionResult War6_13()
+        {
+            var file = "war6_13.txt";
+
+            var dataLoader = new DataLoader();
+
+            var data = dataLoader.GetData(file);
+
+            var parsed = new DataParser().Parse(data);
+
+            return View("Analysis", parsed);
+        }
     }
 }

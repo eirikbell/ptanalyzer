@@ -16,7 +16,7 @@ namespace PaperParser.Model
             DragonActions = new List<DragonAction>();
             KdManagementActions = new List<KdManagementAction>();
 
-            DisplayAdvanced = false;
+            DisplayAdvanced = true;
         }
 
         public List<UnknownAction> UnknownActions { get; }
